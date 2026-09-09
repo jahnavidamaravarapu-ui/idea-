@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – IDEALAUNCH</title>
+  <meta name="description" content="Your IDEALAUNCH dashboard. Explore trending startup ideas, track your saved ideas, and discover new opportunities." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="dashboard.html" class="nav-logo" aria-label="IDEALAUNCH Home">
+      <div class="logo-icon">🚀</div>
+      <span class="gradient-text">IDEALAUNCH</span>
+    </a>
+
+    <div class="nav-links" id="nav-links">
+      <a href="dashboard.html" class="nav-link active" id="nav-dashboard">📊 Dashboard</a>
+      <a href="explore.html"   class="nav-link" id="nav-explore">🔭 Explore</a>
+      <a href="saved.html"     class="nav-link" id="nav-saved">🔖 Saved</a>
+      <a href="profile.html"   class="nav-link" id="nav-profile">👤 Profile</a>
+      <button class="nav-link logout-btn" id="logout-btn" onclick="logout()">⏻ Logout</button>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile nav -->
+<div class="mobile-nav" id="mobile-nav" role="navigation" aria-label="Mobile navigation">
+  <a href="dashboard.html" class="nav-link active">📊 Dashboard</a>
+  <a href="explore.html"   class="nav-link">🔭 Explore</a>
+  <a href="saved.html"     class="nav-link">🔖 Saved</a>
+  <a href="profile.html"   class="nav-link">👤 Profile</a>
+  <button class="nav-link logout-btn" onclick="logout()">⏻ Logout</button>
+</div>
+
+<!-- ── Page Content ── -->
+<div class="page-wrapper">
+  <div class="container">
+
+    <!-- Hero / Welcome Banner -->
+    <div class="dashboard-hero animate-fadeInUp" style="margin-top:32px">
+      <div class="hero-orb"></div>
+      <div class="dashboard-hero-content">
+        <p class="dashboard-greeting">👋 Good to see you,</p>
+        <h1>Welcome back, <span class="gradient-text" id="welcome-name">Explorer</span>!</h1>
+        <p>Your launchpad for the next generation of startup ideas. Discover, save, and explore opportunities that shape the future.</p>
+        <a href="explore.html" class="btn btn-primary btn-lg">
+          🔭 Explore Ideas
+        </a>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <section class="section" aria-label="Statistics">
+      <h2 class="section-title">📈 Platform Overview</h2>
+      <div class="stats-grid stagger">
+
+        <div class="stat-card">
+          <div class="stat-icon cyan">💡</div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-total">0</div>
+            <div class="stat-label">Total Ideas</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon purple">📂</div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-categories">0</div>
+            <div class="stat-label">Categories</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon pink">🔖</div>
+          <div class="stat-info">
+            <div class="stat-value" id="stat-saved">0</div>
+            <div class="stat-label">Saved Ideas</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon green">✦</div>
+          <div class="stat-info">
+            <div class="stat-value">6</div>
+            <div class="stat-label">Featured Today</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Featured Ideas Section -->
+    <section class="section" aria-label="Featured startup ideas">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap">
+        <h2 class="section-title" style="margin-bottom:0;flex:1">⭐ Featured Ideas</h2>
+        <a href="explore.html" class="btn btn-secondary btn-sm">View All →</a>
+      </div>
+
+      <div class="ideas-grid" id="featured-grid">
+        <!-- Populated by dashboard.js -->
+        <div class="skeleton" style="height:240px;border-radius:var(--radius-lg)"></div>
+        <div class="skeleton" style="height:240px;border-radius:var(--radius-lg)"></div>
+        <div class="skeleton" style="height:240px;border-radius:var(--radius-lg)"></div>
+      </div>
+    </section>
+
+    <!-- CTA section -->
+    <section style="padding:40px 0 60px">
+      <div class="card" style="text-align:center;padding:48px;background:linear-gradient(135deg,rgba(0,245,255,0.04) 0%,rgba(124,58,237,0.06) 100%)">
+        <h2 style="font-size:1.8rem;margin-bottom:12px">Ready to find your next big idea?</h2>
+        <p style="margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto">
+          Browse 13+ curated startup ideas across 9 categories. Filter by difficulty, save your favourites, and start building.
+        </p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <a href="explore.html" class="btn btn-primary btn-lg">🔭 Explore All Ideas</a>
+          <a href="saved.html"   class="btn btn-secondary btn-lg">🔖 View Saved</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/auth.js"></script>
+<script src="js/data.js"></script>
+<script src="js/dashboard.js"></script>
+<script>
+  /* ── Hamburger menu ── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileNav.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+  });
+
+  // Close mobile nav on link click
+  mobileNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileNav.classList.remove('open');
+      hamburger.classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>

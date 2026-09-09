@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saved Ideas – IDEALAUNCH</title>
+  <meta name="description" content="Your saved and favourite startup ideas on IDEALAUNCH. Review and manage the ideas you love." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="dashboard.html" class="nav-logo" aria-label="IDEALAUNCH Home">
+      <div class="logo-icon">🚀</div>
+      <span class="gradient-text">IDEALAUNCH</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="dashboard.html" class="nav-link" id="nav-dashboard">📊 Dashboard</a>
+      <a href="explore.html"   class="nav-link" id="nav-explore">🔭 Explore</a>
+      <a href="saved.html"     class="nav-link active" id="nav-saved">🔖 Saved</a>
+      <a href="profile.html"   class="nav-link" id="nav-profile">👤 Profile</a>
+      <button class="nav-link logout-btn" id="logout-btn" onclick="logout()">⏻ Logout</button>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile nav -->
+<div class="mobile-nav" id="mobile-nav" role="navigation" aria-label="Mobile navigation">
+  <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+  <a href="explore.html"   class="nav-link">🔭 Explore</a>
+  <a href="saved.html"     class="nav-link active">🔖 Saved</a>
+  <a href="profile.html"   class="nav-link">👤 Profile</a>
+  <button class="nav-link logout-btn" onclick="logout()">⏻ Logout</button>
+</div>
+
+<!-- ── Page Content ── -->
+<div class="page-wrapper">
+  <div class="container">
+
+    <!-- Page Header -->
+    <header class="page-header animate-fadeInUp">
+      <div class="page-header-eyebrow">My Collection</div>
+      <h1 class="page-header-title">
+        Saved <span class="gradient-text">Ideas</span>
+      </h1>
+      <p class="page-header-desc">
+        Your curated collection of favourite startup ideas. Pick up where you left off.
+      </p>
+    </header>
+
+    <!-- Count bar -->
+    <div class="saved-count-bar animate-fadeInUp" style="animation-delay:0.1s">
+      <p class="result-count" id="saved-count" aria-live="polite" style="margin-bottom:0">
+        0 ideas saved
+      </p>
+      <button
+        id="clear-all-btn"
+        class="btn btn-danger btn-sm"
+        style="display:none"
+        aria-label="Clear all saved ideas"
+      >
+        🗑 Clear All
+      </button>
+    </div>
+
+    <!-- Saved Grid -->
+    <div class="ideas-grid" id="saved-grid" role="list" aria-label="Saved startup ideas">
+      <!-- Populated by saved.js -->
+    </div>
+
+    <div style="padding-bottom:60px"></div>
+
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/auth.js"></script>
+<script src="js/data.js"></script>
+<script src="js/saved.js"></script>
+<script>
+  /* ── Hamburger menu ── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileNav.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+  });
+
+  mobileNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileNav.classList.remove('open');
+      hamburger.classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>

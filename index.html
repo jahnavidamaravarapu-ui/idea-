@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – IDEALAUNCH | Discover Ideas. Build the Future.</title>
+  <meta name="description" content="Login to IDEALAUNCH and discover the next generation of startup ideas across AI, FinTech, Health, Education and more." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="login-page page-wrapper">
+
+  <!-- Decorative orbs -->
+  <div class="glow-orb orb1" style="width:600px;height:600px;top:-200px;left:-200px;background:radial-gradient(circle,rgba(0,245,255,0.07) 0%,transparent 70%);position:fixed;"></div>
+  <div class="glow-orb orb2" style="width:500px;height:500px;bottom:-200px;right:-100px;background:radial-gradient(circle,rgba(124,58,237,0.08) 0%,transparent 70%);position:fixed;"></div>
+
+  <div class="login-box animate-fadeInUp">
+
+    <!-- Logo -->
+    <div class="login-logo">
+      <div class="logo-mark">🚀</div>
+      <h1><span class="gradient-text">IDEALAUNCH</span></h1>
+      <p>Discover Ideas. Build the Future.</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="login-card">
+      <h2>Welcome back</h2>
+      <p class="subtitle">Sign in to your account to continue exploring startup ideas.</p>
+
+      <form id="login-form" class="login-form" novalidate>
+
+        <!-- Email field -->
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-input"
+            placeholder="your@email.com"
+            autocomplete="email"
+            aria-describedby="email-error"
+          />
+          <span class="error-msg" id="email-error" role="alert" aria-live="polite" style="display:none"></span>
+        </div>
+
+        <!-- Password field -->
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div style="position:relative">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-input"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              aria-describedby="password-error"
+              style="width:100%;padding-right:48px"
+            />
+            <!-- Toggle visibility -->
+            <button
+              type="button"
+              id="toggle-password"
+              aria-label="Toggle password visibility"
+              style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);font-size:1.1rem;cursor:pointer;padding:4px;line-height:1"
+            >👁</button>
+          </div>
+          <span class="error-msg" id="password-error" role="alert" aria-live="polite" style="display:none"></span>
+        </div>
+
+        <!-- Global error -->
+        <div id="global-error" style="display:none">
+          <p class="error-msg" style="font-size:0.85rem;text-align:center" id="global-error-msg"></p>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" id="login-btn" class="btn btn-primary btn-full btn-lg">
+          <span id="btn-text">Sign In</span>
+          <span id="btn-spinner" style="display:none">⏳</span>
+        </button>
+
+      </form>
+
+      <p class="subtitle" style="text-align:center;margin-top:20px">
+        New to IDEALAUNCH? <a href="signup.html" style="color:var(--neon-cyan)">Create an account</a>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/auth.js"></script>
+<script>
+  /* ── Redirect if already logged in ── */
+  redirectIfLoggedIn();
+
+  const form           = document.getElementById('login-form');
+  const emailInput     = document.getElementById('email');
+  const passwordInput  = document.getElementById('password');
+  const emailError     = document.getElementById('email-error');
+  const passwordError  = document.getElementById('password-error');
+  const globalError    = document.getElementById('global-error');
+  const globalErrorMsg = document.getElementById('global-error-msg');
+  const togglePwd      = document.getElementById('toggle-password');
+  const loginBtn       = document.getElementById('login-btn');
+  const btnText        = document.getElementById('btn-text');
+  const btnSpinner     = document.getElementById('btn-spinner');
+
+  /* ── Toggle password visibility ── */
+  togglePwd.addEventListener('click', () => {
+    const isText = passwordInput.type === 'text';
+    passwordInput.type = isText ? 'password' : 'text';
+    togglePwd.textContent = isText ? '👁' : '🙈';
+  });
+
+  /* ── Clear errors on input ── */
+  function clearError(input, errorEl) {
+    input.classList.remove('error');
+    errorEl.style.display = 'none';
+    errorEl.textContent = '';
+  }
+
+  emailInput.addEventListener('input', () => clearError(emailInput, emailError));
+  passwordInput.addEventListener('input', () => clearError(passwordInput, passwordError));
+
+  /* ── Show field error ── */
+  function showFieldError(input, errorEl, message) {
+    input.classList.add('error');
+    errorEl.textContent = message;
+    errorEl.style.display = 'flex';
+  }
+
+  /* ── Form submit ── */
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const email    = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    // Reset all errors
+    clearError(emailInput, emailError);
+    clearError(passwordInput, passwordError);
+    globalError.style.display = 'none';
+
+    // Validate using auth.js
+    const errors = validateLoginForm(email, password);
+    let hasErrors = false;
+
+    if (errors.email) {
+      showFieldError(emailInput, emailError, errors.email);
+      hasErrors = true;
+    }
+
+    if (errors.password) {
+      showFieldError(passwordInput, passwordError, errors.password);
+      hasErrors = true;
+    }
+
+    if (hasErrors) return;
+
+    // Simulate login loading state
+    loginBtn.disabled = true;
+    btnText.style.display = 'none';
+    btnSpinner.style.display = 'inline';
+
+    setTimeout(() => {
+      const result = login(email, password);
+
+      if (result.success) {
+        showToast('Login successful! Redirecting…', 'success');
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+      } else {
+        // Restore button
+        loginBtn.disabled = false;
+        btnText.style.display = 'inline';
+        btnSpinner.style.display = 'none';
+
+        // Show global error
+        globalErrorMsg.textContent = result.error;
+        globalError.style.display = 'block';
+
+        // Shake animation
+        form.style.animation = 'shake 0.4s ease';
+        setTimeout(() => { form.style.animation = ''; }, 400);
+      }
+    }, 600);
+  });
+</script>
+
+<style>
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60%  { transform: translateX(-6px); }
+    40%, 80%  { transform: translateX(6px); }
+  }
+</style>
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up – IDEALAUNCH | Discover Ideas. Build the Future.</title>
+  <meta name="description" content="Create your IDEALAUNCH account and discover the next generation of startup ideas." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="login-page page-wrapper">
+  <div class="glow-orb orb1" style="width:600px;height:600px;top:-200px;left:-200px;background:radial-gradient(circle,rgba(0,245,255,0.07) 0%,transparent 70%);position:fixed;"></div>
+  <div class="glow-orb orb2" style="width:500px;height:500px;bottom:-200px;right:-100px;background:radial-gradient(circle,rgba(124,58,237,0.08) 0%,transparent 70%);position:fixed;"></div>
+
+  <div class="login-box animate-fadeInUp">
+    <div class="login-logo">
+      <div class="logo-mark">🚀</div>
+      <h1><span class="gradient-text">IDEALAUNCH</span></h1>
+      <p>Discover Ideas. Build the Future.</p>
+    </div>
+
+    <div class="login-card">
+      <h2>Create your account</h2>
+      <p class="subtitle">Join IDEALAUNCH to discover and save startup ideas.</p>
+
+      <form id="signup-form" class="login-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="name">Full Name</label>
+          <input type="text" id="name" name="name" class="form-input" placeholder="Your full name" autocomplete="name" aria-describedby="name-error" />
+          <span class="error-msg" id="name-error" role="alert" aria-live="polite" style="display:none"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" name="email" class="form-input" placeholder="your@email.com" autocomplete="email" aria-describedby="email-error" />
+          <span class="error-msg" id="email-error" role="alert" aria-live="polite" style="display:none"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-input" placeholder="At least 6 characters" autocomplete="new-password" aria-describedby="password-error" />
+          <span class="error-msg" id="password-error" role="alert" aria-live="polite" style="display:none"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="confirm-password">Confirm Password</label>
+          <input type="password" id="confirm-password" name="confirm-password" class="form-input" placeholder="Repeat your password" autocomplete="new-password" aria-describedby="confirm-password-error" />
+          <span class="error-msg" id="confirm-password-error" role="alert" aria-live="polite" style="display:none"></span>
+        </div>
+        <div id="global-error" style="display:none"><p class="error-msg" style="font-size:0.85rem;text-align:center" id="global-error-msg"></p></div>
+        <button type="submit" id="signup-btn" class="btn btn-primary btn-full btn-lg">Create Account</button>
+      </form>
+
+      <p class="subtitle" style="text-align:center;margin-top:20px">
+        Already have an account? <a href="index.html" style="color:var(--neon-cyan)">Sign in</a>
+      </p>
+    </div>
+  </div>
+</div>
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/auth.js"></script>
+<script>
+  redirectIfLoggedIn();
+
+  const form = document.getElementById('signup-form');
+  const fields = {
+    name: document.getElementById('name'),
+    email: document.getElementById('email'),
+    password: document.getElementById('password'),
+    confirmPassword: document.getElementById('confirm-password')
+  };
+  const errors = {
+    name: document.getElementById('name-error'),
+    email: document.getElementById('email-error'),
+    password: document.getElementById('password-error'),
+    confirmPassword: document.getElementById('confirm-password-error')
+  };
+  const globalError = document.getElementById('global-error');
+  const globalErrorMsg = document.getElementById('global-error-msg');
+
+  function clearFieldError(key) {
+    fields[key].classList.remove('error');
+    errors[key].textContent = '';
+    errors[key].style.display = 'none';
+  }
+
+  Object.keys(fields).forEach(key => fields[key].addEventListener('input', () => clearFieldError(key)));
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    Object.keys(fields).forEach(clearFieldError);
+    globalError.style.display = 'none';
+
+    const values = {
+      name: fields.name.value,
+      email: fields.email.value,
+      password: fields.password.value,
+      confirmPassword: fields.confirmPassword.value
+    };
+    const validationErrors = validateSignupForm(values.name, values.email, values.password, values.confirmPassword);
+    const invalidFields = Object.keys(validationErrors);
+
+    invalidFields.forEach(key => {
+      fields[key].classList.add('error');
+      errors[key].textContent = validationErrors[key];
+      errors[key].style.display = 'flex';
+    });
+    if (invalidFields.length) return;
+
+    const result = registerUser(values.name, values.email, values.password);
+    if (!result.success) {
+      globalErrorMsg.textContent = result.error;
+      globalError.style.display = 'block';
+      return;
+    }
+
+    showToast('Account created successfully. Redirecting to login.', 'success');
+    setTimeout(() => { window.location.href = 'index.html'; }, 800);
+  });
+</script>
+</body>
+</html>

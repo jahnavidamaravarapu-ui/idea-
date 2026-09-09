@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore Ideas – IDEALAUNCH</title>
+  <meta name="description" content="Explore 13+ curated startup ideas across AI, FinTech, Health, Education and more. Search and filter to find your perfect startup concept." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="dashboard.html" class="nav-logo" aria-label="IDEALAUNCH Home">
+      <div class="logo-icon">🚀</div>
+      <span class="gradient-text">IDEALAUNCH</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="dashboard.html" class="nav-link" id="nav-dashboard">📊 Dashboard</a>
+      <a href="explore.html"   class="nav-link active" id="nav-explore">🔭 Explore</a>
+      <a href="saved.html"     class="nav-link" id="nav-saved">🔖 Saved</a>
+      <a href="profile.html"   class="nav-link" id="nav-profile">👤 Profile</a>
+      <button class="nav-link logout-btn" id="logout-btn" onclick="logout()">⏻ Logout</button>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile nav -->
+<div class="mobile-nav" id="mobile-nav" role="navigation" aria-label="Mobile navigation">
+  <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+  <a href="explore.html"   class="nav-link active">🔭 Explore</a>
+  <a href="saved.html"     class="nav-link">🔖 Saved</a>
+  <a href="profile.html"   class="nav-link">👤 Profile</a>
+  <button class="nav-link logout-btn" onclick="logout()">⏻ Logout</button>
+</div>
+
+<!-- ── Page Content ── -->
+<div class="page-wrapper">
+  <div class="container">
+
+    <!-- Page Header -->
+    <header class="page-header animate-fadeInUp">
+      <div class="page-header-eyebrow">Startup Ideas</div>
+      <h1 class="page-header-title">
+        Explore <span class="gradient-text">Startup Ideas</span>
+      </h1>
+      <p class="page-header-desc">
+        Browse our curated collection of startup ideas. Search by keyword, filter by category, and save your favourites.
+      </p>
+    </header>
+
+    <!-- Search & Filter Bar -->
+    <div class="search-filter-bar animate-fadeInUp" style="animation-delay:0.1s">
+      <!-- Search input -->
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input
+          type="search"
+          id="search-input"
+          class="form-input search-input"
+          placeholder="Search by title, category or keyword…"
+          aria-label="Search startup ideas"
+          autocomplete="off"
+        />
+      </div>
+
+      <!-- Category filter -->
+      <select
+        id="category-select"
+        class="category-select"
+        aria-label="Filter by category"
+      >
+        <option value="">All Categories</option>
+        <!-- Options populated by explore.js -->
+      </select>
+
+      <!-- Clear button (shown when filters active) -->
+      <button id="clear-search" class="btn btn-secondary btn-sm" style="display:none" aria-label="Clear all filters">
+        ✕ Clear
+      </button>
+    </div>
+
+    <!-- Result count -->
+    <p class="result-count" id="result-count" aria-live="polite">
+      Showing <span>0</span> of <span>0</span> ideas
+    </p>
+
+    <!-- Ideas Grid -->
+    <div class="ideas-grid" id="ideas-grid" role="list" aria-label="Startup ideas">
+      <!-- Populated by explore.js -->
+    </div>
+
+    <div style="padding-bottom:60px"></div>
+
+  </div>
+</div>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/auth.js"></script>
+<script src="js/data.js"></script>
+<script src="js/explore.js"></script>
+<script>
+  /* ── Hamburger menu ── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileNav.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+  });
+
+  mobileNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileNav.classList.remove('open');
+      hamburger.classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>
